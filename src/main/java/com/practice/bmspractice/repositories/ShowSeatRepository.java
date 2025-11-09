@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ShowSeatRepository extends JpaRepository<ShowSeat, Long> {
-    List<ShowSeat> findAllBySeatInAndShow(List<Seat> seats, MovieShow movieShow);
+    List<ShowSeat> findAllBySeatInAndMovieShow(List<Seat> seats, MovieShow movieShow);
 
     @Override
     <S extends ShowSeat> S save(S entity);

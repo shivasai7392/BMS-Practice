@@ -6,6 +6,8 @@ import com.practice.bmspractice.models.*;
 import com.practice.bmspractice.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -33,6 +35,7 @@ public class TicketService {
         this.userRepository = userRepository;
     }
 
+    @Transactional(isolation = Isolation.SERIALIZABLE, timeout = 2)
     public Ticket bookTicket(Long showId, Long userId, List<Long> seatIds) throws InvalidArgumentException, SeatUnAvailableException {
         // Logic to book ticket
         // Get the showseats
@@ -41,7 +44,7 @@ public class TicketService {
         if (movieShow.isEmpty()) {
             throw new InvalidArgumentException("Invalid show ID");
         }
-        List<ShowSeat> showSeats = showSeatRepository.findAllBySeatInAndShow(seats, movieShow.get());
+        List<ShowSeat> showSeats = showSeatRepository.findAllBySeatInAndMovieShow(seats, movieShow.get());
         double totalPrice = 0.0;
         Optional<User> optionalUser = userRepository.findById(userId);
         if (optionalUser.isEmpty()) {
