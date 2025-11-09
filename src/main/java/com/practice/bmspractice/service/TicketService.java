@@ -36,6 +36,10 @@ public class TicketService {
     }
 
     @Transactional(isolation = Isolation.SERIALIZABLE, timeout = 2)
+    //Remember that an isolation will be applied on the rows that are read/modified
+    //when a method is decorated with @Transactional that level lock will be applied on all the entities read in that
+    //so you should be careful as it can lock all other queries as well,
+    //for example you do not need to apply lock on movieShow as user can access that, but same seats when two users are trying to book that you have to block
     public Ticket bookTicket(Long showId, Long userId, List<Long> seatIds) throws InvalidArgumentException, SeatUnAvailableException {
         // Logic to book ticket
         // Get the showseats
